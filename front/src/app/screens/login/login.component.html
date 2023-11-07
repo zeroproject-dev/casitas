@@ -1,0 +1,68 @@
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+	<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+		<img
+			class="mx-auto h-24 w-auto"
+			src="assets/logo.svg"
+			alt="Traductor LSB Logo"
+		/>
+		<h2
+			class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+		>
+			Inicio de sesión
+		</h2>
+	</div>
+
+	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+		<form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['email'].touched &&
+						form.controls['email'].errors != null
+					"
+					name="email"
+					type="email"
+					label="Correo Eletrónico"
+					formControlName="email"
+				></app-textfield>
+				<small *ngIf="isValidInput('email', 'email')" class="text-red-500"
+					>* Ingrese un correo electrónico válido
+				</small>
+				<small *ngIf="isValidInput('email', 'required')" class="text-red-500"
+					>* El correo es requereido
+				</small>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="submited && form.controls['password'].errors != null"
+					name="password"
+					type="password"
+					label="Contraseña"
+					formControlName="password"
+				></app-textfield>
+				<small *ngIf="isValidInput('password', 'required')" class="text-red-500"
+					>* La contraseña es requerida
+				</small>
+			</div>
+
+			<div>
+				<div class="text-sm mb-3">
+					<a
+						href="#"
+						class="font-semibold text-indigo-600 hover:text-indigo-500"
+						>¿Olvidaste tu contraseña?</a
+					>
+				</div>
+				<button
+					type="submit"
+					[disabled]="!form.valid"
+					class="disabled:bg-indigo-300 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>
+					Iniciar sesión
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

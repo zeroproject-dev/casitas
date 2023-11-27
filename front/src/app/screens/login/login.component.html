@@ -18,19 +18,16 @@
 				<app-textfield
 					[isInvalid]="
 						submited &&
-						form.controls['email'].touched &&
-						form.controls['email'].errors != null
+						form.controls['username'].touched &&
+						form.controls['username'].errors != null
 					"
-					name="email"
-					type="email"
-					label="Correo Eletrónico"
-					formControlName="email"
+					name="username"
+					type="text"
+					label="Usuario / Correo Eletrónico"
+					formControlName="username"
 				></app-textfield>
-				<small *ngIf="isValidInput('email', 'email')" class="text-red-500"
-					>* Ingrese un correo electrónico válido
-				</small>
-				<small *ngIf="isValidInput('email', 'required')" class="text-red-500"
-					>* El correo es requereido
+				<small *ngIf="isValidInput('username', 'required')" class="text-red-500"
+					>* El usuario o correo es requerido
 				</small>
 			</div>
 
@@ -48,13 +45,6 @@
 			</div>
 
 			<div>
-				<div class="text-sm mb-3">
-					<a
-						href="#"
-						class="font-semibold text-indigo-600 hover:text-indigo-500"
-						>¿Olvidaste tu contraseña?</a
-					>
-				</div>
 				<button
 					type="submit"
 					[disabled]="!form.valid"

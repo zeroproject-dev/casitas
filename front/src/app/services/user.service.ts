@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { UserEntity } from '@domain/entities';
 import { firstValueFrom } from 'rxjs';
+import { UserEntity } from '../entities/user.entity';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,7 +12,7 @@ export class UserService {
 	private httpClient = inject(HttpClient);
 
 	constructor() {
-		this.baseUrl = 'http://localhost:3300/api/v1';
+		this.baseUrl = `${environment}/api`;
 	}
 
 	login(formValue: any): Promise<UserEntity> {

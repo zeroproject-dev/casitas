@@ -29,11 +29,11 @@ export class UserController {
 
 	@Get(':id')
 	async findOne(@Param('id') id: string) {
-		try {
-			return await this.userService.findOne(+id);
-		} catch (error) {
+		const user = await this.userService.findOne(+id);
+		if (user == null)
 			throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-		}
+
+		return user;
 	}
 
 	@Patch(':id')

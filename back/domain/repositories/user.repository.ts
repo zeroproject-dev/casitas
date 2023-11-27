@@ -9,21 +9,21 @@ export interface UserFilters {
 }
 
 export interface IUserRepository {
-	getById(id: number): Promise<UserEntity>;
-	getByUniqueField(key: string): Promise<UserEntity>;
+	getById(id: number): Promise<UserEntity | null>;
+	getByUniqueField(key: string): Promise<UserEntity | null>;
 	getAll(filters: UserFilters, paginator: Paginator): Promise<UserEntity[]>;
 
-	create(data: UserCreateDTO): Promise<UserEntity>;
-	update(data: UserUpdateDTO): Promise<UserEntity>;
+	create(data: UserCreateDTO): Promise<UserEntity | null>;
+	update(data: UserUpdateDTO): Promise<UserEntity | null>;
 
-	delete(id: number): Promise<UserEntity>;
+	delete(id: number): Promise<UserEntity | null>;
 }
 
 export class PrismaUserRepository implements IUserRepository {
 	prisma = new PrismaClient();
 
 	async getById(id: number): Promise<UserEntity> {
-		const res = await this.prisma.user.findUniqueOrThrow({
+		const res = await this.prisma.user.findUnique({
 			where: {
 				id: id,
 			},
@@ -33,8 +33,8 @@ export class PrismaUserRepository implements IUserRepository {
 		return entity;
 	}
 
-	async getByUniqueField(key: string): Promise<UserEntity> {
-		const res = await this.prisma.user.findFirstOrThrow({
+	async getByUniqueField(key: string): Promise<UserEntity | null> {
+		const res = await this.prisma.user.findFirst({
 			where: {
 				OR: [{ email: key }, { username: key }],
 			},
@@ -70,12 +70,12 @@ export class PrismaUserRepository implements IUserRepository {
 		return entities;
 	}
 
-	async create(data: UserCreateDTO): Promise<UserEntity> {
+	async create(data: UserCreateDTO): Promise<UserEntity | null> {
 		const newUser = await this.prisma.user.create({ data });
 		return UserMapper.fromPrisma(newUser);
 	}
 
-	async update(data: UserUpdateDTO): Promise<UserEntity> {
+	async update(data: UserUpdateDTO): Promise<UserEntity | null> {
 		const updatedUser = await this.prisma.user.update({
 			where: {
 				id: data.id,
@@ -86,7 +86,7 @@ export class PrismaUserRepository implements IUserRepository {
 		return UserMapper.fromPrisma(updatedUser);
 	}
 
-	async delete(id: number): Promise<UserEntity> {
+	async delete(id: number): Promise<UserEntity | null> {
 		const deletedUser = await this.prisma.user.delete({
 			where: { id },
 		});

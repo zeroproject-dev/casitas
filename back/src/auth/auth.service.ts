@@ -9,13 +9,14 @@ export class AuthService {
 		private jwtService: JwtService,
 	) {}
 
-	async validateUser(emailOrUsername: string, pass: string): Promise<any> {
-		const user = await this.usersService.findOneByUnique(emailOrUsername);
-		if (user && user.comparePassword(pass)) {
+	async validateUser(username: string, pass: string): Promise<any> {
+		const user = await this.usersService.findOneByUnique(username);
+		if (user?.comparePassword(pass)) {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { password, ...result } = user;
 			return result;
 		}
+
 		return null;
 	}
 
@@ -24,5 +25,9 @@ export class AuthService {
 		return {
 			access_token: this.jwtService.sign(payload),
 		};
+	}
+
+	async validateToken(token: string) {
+		this.jwtService.decode(token);
 	}
 }

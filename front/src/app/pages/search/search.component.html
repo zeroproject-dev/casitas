@@ -1,0 +1,59 @@
+<div class="mt-6 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+	<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+		<h2
+			class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+		>
+			Búsqueda
+		</h2>
+	</div>
+
+	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+		<div>
+			<!-- Cuadro de búsqueda -->
+			<div class="mb-4">
+				<label for="searchText" class="block text-sm font-medium text-gray-700"
+					>Buscar por nombre o descripción:</label
+				>
+				<input
+					type="text"
+					id="searchText"
+					[(ngModel)]="searchText"
+					class="mt-1 p-2 border rounded-md w-full"
+				/>
+			</div>
+
+			<!-- Slider de costo -->
+			<div class="mb-4">
+				<label for="costRange" class="block text-sm font-medium text-gray-700"
+					>Rango de costo:</label
+				>
+				<input
+					type="range"
+					id="costRange"
+					[(ngModel)]="filters.costRange.min"
+					class="mt-1 p-2 border rounded-md w-full"
+				/>
+				<span class="text-sm">{{ filters.costRange.min }}</span>
+			</div>
+
+			<button
+				(click)="applyFilters()"
+				class="bg-blue-500 text-white px-4 py-2 rounded-md"
+			>
+				Aplicar Filtros
+			</button>
+		</div>
+
+		<!-- Resultados -->
+		<div class="mt-6">
+			<div
+				*ngFor="let house of filteredHouses"
+				class="bg-white p-4 rounded-md shadow-md mb-4"
+			>
+				<h3 class="text-xl font-semibold mb-2">{{ house.name }}</h3>
+				<p class="text-gray-700">{{ house.description }}</p>
+				<p class="text-gray-800 font-bold mt-2">Costo: ${{ house.cost }}</p>
+			</div>
+		</div>
+	</div>
+</div>

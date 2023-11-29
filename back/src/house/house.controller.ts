@@ -6,17 +6,25 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Req,
+	UseGuards,
 } from '@nestjs/common';
 import { HouseService } from './house.service';
 import { HouseCreateDTO, HouseUpdateDTO } from '@domain/dto/house.dto';
+import { Request } from 'express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
-@Controller('house')
+@Controller('houses')
 export class HouseController {
 	constructor(private readonly houseService: HouseService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@Post()
-	create(@Body() createHouseDto: HouseCreateDTO) {
-		return this.houseService.create(createHouseDto);
+	create(@Req() req: Request, @Body() createHouseDto: HouseCreateDTO) {
+		console.log(req.user);
+		console.log(createHouseDto);
+		return 'holi';
+		// return this.houseService.create(createHouseDto);
 	}
 
 	@Get()

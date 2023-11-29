@@ -1,0 +1,157 @@
+<div class="mt-6 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+	<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+		<h2
+			class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+		>
+			Registro
+		</h2>
+	</div>
+
+	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+		<form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['email'].touched &&
+						form.controls['email'].errors != null
+					"
+					name="email"
+					type="text"
+					label="Correo Electrónico"
+					formControlName="email"
+				></app-textfield>
+				<small *ngIf="isValidInput('email', 'required')" class="text-red-500"
+					>* El correo electrónico es requerido</small
+				>
+				<small *ngIf="isValidInput('email', 'email')" class="text-red-500"
+					>* Ingrese un correo válido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['name'].touched &&
+						form.controls['name'].errors != null
+					"
+					name="name"
+					type="text"
+					label="Nombre"
+					formControlName="name"
+				></app-textfield>
+				<small
+					*ngIf="
+						isValidInput('name', 'required') ||
+						isValidInput('name', 'whitespace')
+					"
+					class="text-red-500"
+					>* El nombre es requerido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['lastname'].touched &&
+						form.controls['lastname'].errors != null
+					"
+					name="lastname"
+					type="text"
+					label="Apellido"
+					formControlName="lastname"
+				></app-textfield>
+				<small
+					*ngIf="
+						isValidInput('lastname', 'required') ||
+						isValidInput('lastname', 'whitespace')
+					"
+					class="text-red-500"
+					>* El apellido es requerido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['username'].touched &&
+						form.controls['username'].errors != null
+					"
+					name="username"
+					type="text"
+					label="Usuario"
+					formControlName="username"
+				></app-textfield>
+				<small
+					*ngIf="
+						isValidInput('username', 'required') ||
+						isValidInput('username', 'whitespace')
+					"
+					class="text-red-500"
+					>* El usuario es requerido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['password'].touched &&
+						form.controls['password'].errors != null
+					"
+					name="password"
+					type="password"
+					label="Contraseña"
+					formControlName="password"
+				></app-textfield>
+				<small
+					*ngIf="
+						isValidInput('password', 'required') ||
+						isValidInput('password', 'whitespace')
+					"
+					class="text-red-500"
+					>* La contraseña es requerida</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['confirmPassword'].touched &&
+						form.controls['confirmPassword'].errors != null
+					"
+					name="confirmPassword"
+					type="password"
+					label="Confirmar Contraseña"
+					formControlName="confirmPassword"
+				></app-textfield>
+				<small
+					*ngIf="isValidInput('confirmPassword', 'required')"
+					class="text-red-500"
+				>
+					* Por favor, confirma tu contraseña
+				</small>
+				<small
+					*ngIf="isValidInput('confirmPassword', 'passwordMismatch')"
+					class="text-red-500"
+				>
+					* Las contraseñas no coinciden
+				</small>
+			</div>
+
+			<div>
+				<button
+					type="submit"
+					[disabled]="!form.valid"
+					class="disabled:bg-indigo-300 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>
+					Registrar
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

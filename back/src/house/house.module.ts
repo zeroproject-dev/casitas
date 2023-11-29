@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { HouseService } from './house.service';
 import { HouseController } from './house.controller';
 import { PrismaHouseRepository } from '@domain/repositories/house.repository';
+import { LocalStrategy } from 'src/auth/strategies/local.strategy';
+import { AuthModule } from 'src/auth/auth.module';
+import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 
 @Module({
 	controllers: [HouseController],
@@ -11,6 +14,9 @@ import { PrismaHouseRepository } from '@domain/repositories/house.repository';
 			provide: 'IHouseRepository',
 			useClass: PrismaHouseRepository,
 		},
+		LocalStrategy,
+		JwtStrategy,
 	],
+	imports: [AuthModule],
 })
 export class HouseModule {}

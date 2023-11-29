@@ -1,0 +1,92 @@
+<div class="mt-6 flex min-h-full flex-col justify-center px-6 pt-12 lg:px-8">
+	<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+		<h2
+			class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+		>
+			Ofrecer una Vivienda
+		</h2>
+	</div>
+
+	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+		<form class="space-y-6" [formGroup]="form" (ngSubmit)="onSubmit()">
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['name'].touched &&
+						form.controls['name'].errors != null
+					"
+					name="name"
+					type="text"
+					label="Nombre de la Vivienda"
+					formControlName="name"
+				></app-textfield>
+				<small *ngIf="isValidInput('name', 'required')" class="text-red-500"
+					>* El nombre de la vivienda es requerido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['cost'].touched &&
+						form.controls['cost'].errors != null
+					"
+					name="cost"
+					type="number"
+					label="Costo"
+					formControlName="cost"
+				></app-textfield>
+				<small *ngIf="isValidInput('cost', 'required')" class="text-red-500"
+					>* El costo es requerido</small
+				>
+			</div>
+
+			<div>
+				<app-textfield
+					[isInvalid]="
+						submited &&
+						form.controls['description'].touched &&
+						form.controls['description'].errors != null
+					"
+					name="description"
+					type="text"
+					label="Descripción"
+					formControlName="description"
+				></app-textfield>
+				<small
+					*ngIf="isValidInput('description', 'required')"
+					class="text-red-500"
+					>* La descripción es requerida</small
+				>
+			</div>
+			<div>
+				<label for="map" class="block font-medium leading-6 text-gray-900"
+					>Ubicación en el Mapa</label
+				>
+				<div class="mt-2">
+					<div
+						style="height: 300px"
+						leaflet
+						[leafletOptions]="mapOptions"
+						[leafletLayers]="layers"
+						[leafletZoom]="zoom"
+						[leafletCenter]="center"
+						(leafletMapReady)="onMapReady($event)"
+					></div>
+				</div>
+			</div>
+
+			<div>
+				<button
+					type="submit"
+					[disabled]="!form.valid"
+					class="disabled:bg-indigo-300 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>
+					Ofrecer Vivienda
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

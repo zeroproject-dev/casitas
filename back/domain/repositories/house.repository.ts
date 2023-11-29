@@ -1,9 +1,8 @@
 import { HouseCreateDTO, HouseUpdateDTO } from 'domain/dto/house.dto';
 import { PrismaClient } from '@prisma/client';
 import { HouseMapper } from 'domain/mappers/house.mapper';
-import { GJSONObject, HouseEntity } from 'domain/entities';
+import { HouseEntity } from 'domain/entities';
 import { Paginator } from 'commons/paginator';
-import { Sql } from '@prisma/client/runtime/library';
 
 export interface HouseFilters {
 	maxCost: number;
@@ -38,19 +37,28 @@ export class PrismaHouseRepository implements IHouseRepository {
 		filters: HouseFilters,
 		paginator: Paginator,
 	): Promise<HouseEntity[]> {
-		const res = await this.prisma.house.findMany({
-			take: paginator.limit,
-			skip: paginator.offset,
-			where: {
-				cost: {
-					lte: filters.maxCost,
-					gt: filters.minCost,
+		let res;
+		if (filters !== null) {
+			res = await this.prisma.house.findMany({
+				take: paginator.limit,
+				skip: paginator.offset,
+				where: {
+					cost: {
+						lte: filters.maxCost,
+						gt: filters.minCost,
+					},
 				},
-			},
-			include: {
-				User: true,
-			},
-		});
+				include: {
+					User: true,
+				},
+			});
+		} else {
+			res = await this.prisma.house.findMany({
+				include: {
+					User: true,
+				},
+			});
+		}
 
 		const entities = res.map(HouseMapper.fromPrisma);
 		return entities;

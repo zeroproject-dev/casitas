@@ -41,9 +41,7 @@ export class TextfieldComponent implements OnInit, ControlValueAccessor {
 		this.isDisabled = isDisabled;
 	}
 
-	onChange(a: any): void {
-		console.log(a);
-	}
+	onChange(_a: any): void {}
 	onTouched(): void {}
 	onInput(value: any) {
 		if (value != null) {

@@ -3,7 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -37,7 +36,7 @@ export class LoginComponent implements OnInit {
 			if (!this.form.valid) return;
 
 			const res = await this.authService.login(this.form.value);
-			localStorage.setItem('access_token', res.token);
+			localStorage.setItem('access_token', res.access_token);
 			this.router.navigate(['./']);
 		} catch (error) {
 			if (error instanceof HttpErrorResponse) {

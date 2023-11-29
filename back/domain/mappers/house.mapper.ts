@@ -7,8 +7,8 @@ export class HouseMapper {
 
 		return {
 			cost: Number(cost),
+			pos: { lat: 0, lng: 0 },
 			...rest,
-			pos: {},
 		};
 	}
 }

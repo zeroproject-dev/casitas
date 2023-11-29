@@ -63,7 +63,7 @@
 				>Buscar</a
 			>
 		</li>
-		<li class="text-gray-300">
+		<li class="text-gray-300" *ngIf="authService.isLogged">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -87,8 +87,9 @@
 					'hover:text-gray-500',
 					'font-bold'
 				]"
-				[routerLink]="['/sell']"
-				>Publicar</a
+				[routerLink]="['/offer']"
+				*ngIf="authService.isLogged"
+				>Ofrecer</a
 			>
 		</li>
 	</ul>

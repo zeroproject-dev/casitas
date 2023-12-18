@@ -1,4 +1,4 @@
-CREATE EXTENSION postgis;
+CREATE EXTENSION IF NOT EXISTS postgis;
 -- CreateTable
 CREATE TABLE "House" (
     "id" SERIAL NOT NULL,

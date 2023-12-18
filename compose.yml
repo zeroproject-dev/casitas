@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  db:
+    image: postgis/postgis
+    container_name: casitas-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: exampledb
+    ports:
+      - 5432:5432
+
+  back:
+    container_name: "casitas-back"
+    build: "./back/."
+    ports:
+      - 3000:3000
+    command: >
+      sh -c "npx prisma db push --schema=./prisma/schema.prisma && npm run start:prod & wait"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/exampledb?schema=public
+      - JWT_SECRET=this is my secret
+    depends_on:
+      - db
+
+  front:
+    container_name: "casitas-front"
+    build: "./front/."
+    ports:
+      - 8080:80

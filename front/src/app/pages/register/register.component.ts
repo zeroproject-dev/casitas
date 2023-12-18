@@ -57,7 +57,6 @@ export class RegisterComponent {
 
 			const { confirmPassword, ...rest } = this.form.value;
 			const res = await this.authService.register(rest);
-			console.log(res);
 			this.router.navigate(['login']);
 		} catch (error) {
 			if (error instanceof HttpErrorResponse) {

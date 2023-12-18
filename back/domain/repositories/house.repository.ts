@@ -1,5 +1,5 @@
 import { HouseCreateDTO, HouseUpdateDTO } from 'domain/dto/house.dto';
-import { PrismaClient } from '@prisma/client';
+import { House, PrismaClient } from '@prisma/client';
 import { HouseMapper } from 'domain/mappers/house.mapper';
 import { HouseEntity } from 'domain/entities';
 import { Paginator } from 'commons/paginator';
@@ -13,7 +13,7 @@ export interface IHouseRepository {
 	getById(id: number): Promise<HouseEntity>;
 	getAll(filters: HouseFilters, paginator: Paginator): Promise<HouseEntity[]>;
 
-	create(data: HouseCreateDTO): Promise<HouseEntity>;
+	create(userId: number, data: HouseCreateDTO): Promise<HouseEntity>;
 	update(data: HouseUpdateDTO): Promise<HouseEntity>;
 
 	delete(id: number): Promise<HouseEntity>;
@@ -33,11 +33,19 @@ export class PrismaHouseRepository implements IHouseRepository {
 		return entity;
 	}
 
+	async getHouses() {
+		const q = `SELECT h.id as "houseId", h."name" as "houseName", h."cost" as "houseCost", h.description as "houseDescription", h."createdAt" as "houseCreatedAt", h."updatedAt" as "houseUpdatedAt", ST_X(h.pos) AS x, ST_Y(h.pos) AS y, u.email as "userEmail", u.name as "userName", u.lastname as "userLastname", u.id as "userId", u.username as username, u."createdAt" as "userCreatedAt", u."updatedAt" as "userUpdatedAt" FROM "House" h INNER JOIN "User" u ON h."userId" = u.id;`;
+		const res: any = await this.prisma.$queryRawUnsafe(q);
+		return res.map(HouseMapper.fromPrismaQuery);
+	}
+
 	async getAll(
 		filters: HouseFilters,
 		paginator: Paginator,
 	): Promise<HouseEntity[]> {
-		let res;
+		let res: House[];
+		return await this.getHouses();
+
 		if (filters !== null) {
 			res = await this.prisma.house.findMany({
 				take: paginator.limit,
@@ -64,22 +72,22 @@ export class PrismaHouseRepository implements IHouseRepository {
 		return entities;
 	}
 
-	async insertGeoJson(data: HouseCreateDTO) {
-		await this.prisma
-			.$queryRaw`INSERT INTO house (name, cost, description, pos) VALUES (${
+	async insertGeoJson(userId: number, data: HouseCreateDTO) {
+		const date = new Date();
+		const q = `INSERT INTO "House" (name, cost, description, pos, "userId", "createdAt", "updatedAt") VALUES ('${
 			data.name
-		}, ${data.cost}, ${data.description}, ${JSON.stringify(data.pos)})`;
+		}', ${Number(data.cost)}, '${data.description}',
+ST_MakePoint(${data.pos.lat}, ${
+			data.pos.lng
+		}), ${userId}, TO_TIMESTAMP('${date.toISOString()}', 'YYYY-MM-DDTHH24:MI:SS.MSZ'), TO_TIMESTAMP('${date.toISOString()}', 'YYYY-MM-DDTHH24:MI:SS.MSZ'))`;
+		await this.prisma.$queryRawUnsafe(q);
 	}
 
-	async create(data: HouseCreateDTO): Promise<HouseEntity> {
-		await this.insertGeoJson(data);
+	async create(userId: number, data: HouseCreateDTO): Promise<HouseEntity> {
+		await this.insertGeoJson(userId, data);
 		const newHouse = await this.prisma.house.findFirst({
 			where: {
-				AND: [
-					{ name: data.name },
-					{ cost: data.cost },
-					{ description: data.description },
-				],
+				AND: [{ name: data.name }, { description: data.description }],
 			},
 		});
 		return HouseMapper.fromPrisma(newHouse);

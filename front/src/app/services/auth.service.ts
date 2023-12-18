@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { UserEntity } from '../entities/user.entity';
 import { firstValueFrom } from 'rxjs';
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 @Injectable({
 	providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
 	private baseUrl: string;
 	private httpClient = inject(HttpClient);
 	private router = inject(Router);
@@ -16,6 +16,10 @@ export class AuthService {
 
 	constructor() {
 		this.baseUrl = `${environment.apiUrl}/auth`;
+	}
+
+	async ngOnInit() {
+		this.isLogged = this.validateAccessToken();
 	}
 
 	login(formValue: any): Promise<{ access_token: string }> {
@@ -38,7 +42,7 @@ export class AuthService {
 	validateAccessToken(): boolean {
 		const token = localStorage.getItem('access_token');
 
-		if (token === undefined) {
+		if (token === null) {
 			this.logout();
 			return false;
 		}

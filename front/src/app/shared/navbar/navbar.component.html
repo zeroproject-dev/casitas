@@ -94,12 +94,21 @@
 		</li>
 	</ul>
 	<div class="hidden lg:inline-block lg:ml-auto">
+		<button
+			*ngIf="authService.isLogged"
+			class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200"
+			(click)="authService.logout()"
+		>
+			Salir
+		</button>
 		<a
+			*ngIf="!authService.isLogged"
 			class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200"
 			routerLink="/register"
 			>Registrarse</a
 		>
 		<a
+			*ngIf="!authService.isLogged"
 			class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-blue-600 hover:bg-blue-800 text-sm text-gray-50 font-bold rounded-xl transition duration-200"
 			routerLink="/login"
 			>Ingresar</a

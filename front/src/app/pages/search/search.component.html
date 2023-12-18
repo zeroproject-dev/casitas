@@ -7,9 +7,8 @@
 		</h2>
 	</div>
 
-	<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-		<div>
-			<!-- Cuadro de búsqueda -->
+	<div class="w-[90%] mx-auto">
+		<div class="flex flex-col w-[300px] mx-auto">
 			<div class="mb-4">
 				<label for="searchText" class="block text-sm font-medium text-gray-700"
 					>Buscar por nombre o descripción:</label
@@ -22,18 +21,19 @@
 				/>
 			</div>
 
-			<!-- Slider de costo -->
 			<div class="mb-4">
 				<label for="costRange" class="block text-sm font-medium text-gray-700"
-					>Rango de costo:</label
+					>Costo mínimo:</label
 				>
 				<input
 					type="range"
 					id="costRange"
-					[(ngModel)]="filters.costRange.min"
+					max="5000000000"
+					step="1000"
+					[(ngModel)]="filters.min"
 					class="mt-1 p-2 border rounded-md w-full"
 				/>
-				<span class="text-sm">{{ filters.costRange.min }}</span>
+				<span class="text-sm">{{ filters.min }}</span>
 			</div>
 
 			<button
@@ -44,16 +44,34 @@
 			</button>
 		</div>
 
-		<!-- Resultados -->
-		<div class="mt-6">
-			<div
-				*ngFor="let house of filteredHouses"
-				class="bg-white p-4 rounded-md shadow-md mb-4"
-			>
-				<h3 class="text-xl font-semibold mb-2">{{ house.name }}</h3>
-				<p class="text-gray-700">{{ house.description }}</p>
-				<p class="text-gray-800 font-bold mt-2">Costo: ${{ house.cost }}</p>
+		<section class="flex w-full gap-4 justify-center">
+			<div class="mt-6">
+				<div
+					*ngFor="let house of filteredHouses"
+					class="bg-white p-4 rounded-md shadow-md mb-4"
+				>
+					<h3 class="text-xl font-semibold mb-2">{{ house.name }}</h3>
+					<p class="text-gray-700">{{ house.description }}</p>
+					<p class="text-gray-800 font-bold mt-2">
+						Costo: {{ house.cost }} Bs.
+					</p>
+					<p class="text-gray-800 font-bold mt-2">
+						Propietario:
+						<span>{{ house.User.name + " " + house.User.lastname }}</span>
+					</p>
+				</div>
 			</div>
-		</div>
+			<div class="w-[70%] mt-6">
+				<div
+					style="height: 500px"
+					leaflet
+					[leafletOptions]="mapOptions"
+					[leafletLayers]="layers"
+					[leafletZoom]="zoom"
+					[leafletCenter]="center"
+					(leafletMapReady)="onMapReady($event)"
+				></div>
+			</div>
+		</section>
 	</div>
 </div>

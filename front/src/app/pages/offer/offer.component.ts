@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { LatLng, Marker, tileLayer } from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { HouseService } from 'src/app/services/house.service';
+import { START_MAP } from 'src/lib/contants';
 
 interface Point {
 	lat: number;
@@ -34,8 +35,8 @@ export class OfferComponent {
 		],
 	};
 	layers = [];
-	zoom = 13;
-	center: LatLng = new LatLng(-16.48613, -68.141326);
+	zoom = START_MAP.zoom;
+	center: LatLng = new LatLng(START_MAP.lat, START_MAP.lng);
 
 	marker!: Marker;
 
@@ -90,7 +91,11 @@ export class OfferComponent {
 			const formJson = { ...this.form.value, pos: this.point };
 
 			const res = await this.houseService.create(formJson);
-			console.log(res);
+			this.toast.success(
+				`Oferta de ${res.name} creada correctamente`,
+				'Correcto',
+			);
+			this.router.navigate(['./search']);
 		} catch (error) {
 			if (error instanceof HttpErrorResponse) {
 				this.toast.error(error.error['message'], 'Error');

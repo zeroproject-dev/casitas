@@ -13,9 +13,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { OfferComponent } from './pages/offer/offer.component';
-import { MapComponent } from './shared/map/map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { SearchComponent } from './pages/search/search.component';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 
 @NgModule({
 	declarations: [
@@ -26,7 +26,6 @@ import { SearchComponent } from './pages/search/search.component';
 		TextfieldComponent,
 		RegisterComponent,
 		OfferComponent,
-		MapComponent,
 		SearchComponent,
 	],
 	imports: [
@@ -37,6 +36,7 @@ import { SearchComponent } from './pages/search/search.component';
 		HttpClientModule,
 		BrowserAnimationsModule,
 		LeafletModule,
+		LeafletDrawModule,
 		ToastrModule.forRoot(),
 	],
 	providers: [],

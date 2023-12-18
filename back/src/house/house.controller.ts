@@ -8,6 +8,8 @@ import {
 	Delete,
 	Req,
 	UseGuards,
+	HttpException,
+	HttpStatus,
 } from '@nestjs/common';
 import { HouseService } from './house.service';
 import { HouseCreateDTO, HouseUpdateDTO } from '@domain/dto/house.dto';
@@ -21,10 +23,14 @@ export class HouseController {
 	@UseGuards(JwtAuthGuard)
 	@Post()
 	create(@Req() req: Request, @Body() createHouseDto: HouseCreateDTO) {
-		console.log(req.user);
-		console.log(createHouseDto);
-		return 'holi';
-		// return this.houseService.create(createHouseDto);
+		const userId = (req.user as any)?.userId;
+		if (!userId) {
+			throw new HttpException(
+				'Error al obtener el usuario',
+				HttpStatus.NOT_FOUND,
+			);
+		}
+		return this.houseService.create(userId, createHouseDto);
 	}
 
 	@Get()

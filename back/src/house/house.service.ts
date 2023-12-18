@@ -13,8 +13,8 @@ export class HouseService {
 		private readonly houseRepository: IHouseRepository,
 	) {}
 
-	async create(data: HouseCreateDTO) {
-		return await this.houseRepository.create(data);
+	async create(userId: number, data: HouseCreateDTO) {
+		return await this.houseRepository.create(userId, data);
 	}
 
 	async findAll(filters: HouseFilters, pag: Paginator) {

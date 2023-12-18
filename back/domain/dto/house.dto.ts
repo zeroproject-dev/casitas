@@ -2,7 +2,7 @@ import { GJSONObject } from '@domain/entities';
 
 export class HouseCreateDTO {
 	name: string;
-	cost: number;
+	cost: string;
 	description: string;
 	pos: any;
 }

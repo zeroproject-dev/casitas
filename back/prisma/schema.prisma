@@ -17,18 +17,30 @@ model House {
   updatedAt   DateTime                 @updatedAt
   userId      Int?
   User        User?                    @relation(fields: [userId], references: [id])
+  Favorite    Favorite[]
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   name      String
   lastname  String
-  username  String   @unique
+  username  String     @unique
   password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   House     House[]
+  Favorite  Favorite[]
+}
+
+model Favorite {
+  user  User  @relation(references: [id], fields: [userId])
+  house House @relation(references: [id], fields: [houseId])
+
+  userId  Int
+  houseId Int
+
+  @@id(name: "id", fields: [userId, houseId])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

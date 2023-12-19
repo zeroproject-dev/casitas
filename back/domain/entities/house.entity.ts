@@ -13,6 +13,7 @@ export class HouseEntity {
 	description: string;
 	pos: Point;
 	User: UserEntity;
+	isFavorite?: boolean;
 
 	createdAt: Date;
 	updatedAt: Date;

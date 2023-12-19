@@ -6,9 +6,10 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HouseModule } from './house/house.module';
 import { FavoriteService } from './favorite/favorite.service';
+import { FavoriteController } from './favorite/favorite.controller';
 
 @Module({
-	controllers: [AppController],
+	controllers: [AppController, FavoriteController],
 	providers: [AppService, PrismaService, FavoriteService],
 	imports: [UserModule, AuthModule, HouseModule],
 })

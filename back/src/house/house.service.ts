@@ -32,4 +32,8 @@ export class HouseService {
 	async remove(id: number) {
 		return await this.houseRepository.delete(id);
 	}
+
+	async getAllWithFavoritesOf(userId: number) {
+		return await this.houseRepository.getAllWithFavoritesOf(userId);
+	}
 }

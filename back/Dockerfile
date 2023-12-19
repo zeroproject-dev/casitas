@@ -8,8 +8,6 @@ RUN npm install --only=development
 
 COPY . .
 
-COPY .env .env
-
 RUN npx prisma generate
 
 RUN npm run build
@@ -26,7 +24,6 @@ COPY package*.json ./
 RUN npm install --only=production
 
 COPY . .
-COPY .env .env
 
 COPY --from=development /usr/src/app/dist ./dist
 COPY --from=development /usr/src/app/node_modules ./node_modules

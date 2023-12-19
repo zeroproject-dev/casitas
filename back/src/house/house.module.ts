@@ -17,6 +17,13 @@ import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 		LocalStrategy,
 		JwtStrategy,
 	],
+	exports: [
+		HouseService,
+		{
+			provide: 'IHouseRepository',
+			useClass: PrismaHouseRepository,
+		},
+	],
 	imports: [AuthModule],
 })
 export class HouseModule {}

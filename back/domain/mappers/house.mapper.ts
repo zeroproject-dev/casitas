@@ -20,6 +20,7 @@ export class HouseMapper {
 			houseName,
 			houseCost,
 			houseDescription,
+			isfavorite,
 			houseCreatedAt,
 			houseUpdatedAt,
 			...rest2
@@ -48,6 +49,7 @@ export class HouseMapper {
 			id: houseId,
 			name: houseName,
 			cost: houseCost,
+			isFavorite: isfavorite,
 			description: houseDescription,
 			createdAt: houseCreatedAt,
 			updatedAt: houseUpdatedAt,

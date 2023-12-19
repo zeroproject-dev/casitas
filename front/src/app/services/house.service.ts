@@ -24,7 +24,34 @@ export class HouseService {
 		const res = this.httpClient.post<HouseEntity>(
 			`${this.baseUrl}/`,
 			formValue,
-			{ headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) },
+			{ headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
+		);
+		return firstValueFrom(res);
+	}
+
+	addFavorite(houseId: number): Promise<HouseEntity> {
+		const token = localStorage.getItem('access_token');
+		if (token === null) {
+			throw new Error('Falta token');
+		}
+
+		const res = this.httpClient.post<HouseEntity>(
+			`${environment.apiUrl}/favorite/${houseId}`,
+			{},
+			{ headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
+		);
+		return firstValueFrom(res);
+	}
+
+	removeFavorite(houseId: number): Promise<HouseEntity> {
+		const token = localStorage.getItem('access_token');
+		if (token === null) {
+			throw new Error('Falta token');
+		}
+
+		const res = this.httpClient.delete<HouseEntity>(
+			`${environment.apiUrl}/favorite/${houseId}`,
+			{ headers: new HttpHeaders().set('Authorization', `Bearer ${token}`) }
 		);
 		return firstValueFrom(res);
 	}

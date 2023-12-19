@@ -12,7 +12,7 @@ const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'offer', component: OfferComponent, canMatch: [authGuard] },
-	{ path: 'search', component: SearchComponent },
+	{ path: 'search', component: SearchComponent, canMatch: [authGuard] },
 	// TODO: Add 404 page
 	{ path: '**', redirectTo: '', pathMatch: 'full' },
 ];

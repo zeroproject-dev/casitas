@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { LatLng, Marker, tileLayer } from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { HouseService } from 'src/app/services/house.service';
-import { START_MAP } from 'src/lib/contants';
+import { HOUSE_ICON, START_MAP } from 'src/lib/constants';
 
 interface Point {
 	lat: number;
@@ -66,7 +66,7 @@ export class OfferComponent {
 			map.removeLayer(this.marker);
 		}
 
-		this.marker = new Marker(latlng, { draggable: true })
+		this.marker = new Marker(latlng, { draggable: true, icon: HOUSE_ICON })
 			.addTo(map)
 			.on('dragend', () => this.onMarkerDragEnd(map));
 
@@ -93,7 +93,7 @@ export class OfferComponent {
 			const res = await this.houseService.create(formJson);
 			this.toast.success(
 				`Oferta de ${res.name} creada correctamente`,
-				'Correcto',
+				'Correcto'
 			);
 			this.router.navigate(['./search']);
 		} catch (error) {

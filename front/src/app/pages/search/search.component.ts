@@ -16,7 +16,8 @@ import {
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { HouseEntity } from 'src/app/entities/house.entity';
 import { SearchService } from 'src/app/services/search.service';
-import { START_MAP } from 'src/lib/contants';
+import { HOUSE_ICON, START_MAP } from 'src/lib/constants';
+import { HouseService } from 'src/app/services/house.service';
 
 @Component({
 	selector: 'app-search',
@@ -32,12 +33,6 @@ export class SearchComponent {
 
 	map: Map | undefined;
 	markerGroup: LayerGroup | undefined;
-	icon: Icon = new Icon({
-		iconUrl: 'assets/house.png',
-
-		iconSize: [38, 38],
-		popupAnchor: [-3, -76],
-	});
 	mapOptions = {
 		layers: [
 			tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -74,7 +69,8 @@ export class SearchComponent {
 
 	constructor(
 		private searchService: SearchService,
-		private cdRef: ChangeDetectorRef,
+		private houseService: HouseService,
+		private cdRef: ChangeDetectorRef
 	) {}
 
 	onMapReady(map: Map) {
@@ -103,10 +99,24 @@ export class SearchComponent {
 		map.addLayer(this.drawItems);
 	}
 
-	ngOnInit(): void {
-		this.searchService.searchQuery$
-			.pipe(debounceTime(300), distinctUntilChanged())
-			.subscribe((query) => this.search(query));
+	async onFavoriteClick(house: HouseEntity) {
+		try {
+			let res;
+			if (house.isFavorite) {
+				res = await this.houseService.removeFavorite(house.id);
+			} else {
+				res = await this.houseService.addFavorite(house.id);
+			}
+			console.log(res);
+			house.isFavorite = !house.isFavorite;
+		} catch (error) {
+			//ADD TOAST
+		}
+	}
+
+	async ngOnInit() {
+		this.houses = await this.searchService.getFavoriteHouses();
+		this.applyFilters();
 	}
 
 	search(query: string): void {
@@ -120,6 +130,8 @@ export class SearchComponent {
 		const bounds = this.drawItems.getBounds();
 		const withBounds = Object.keys(bounds).length !== 0;
 
+		this.markerGroup?.clearLayers();
+
 		this.filteredHouses = this.houses.filter((house) => {
 			let res =
 				(house.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -132,9 +144,10 @@ export class SearchComponent {
 				const markerLatLng = new LatLng(house.pos.lat, house.pos.lng);
 				res = res && bounds.contains(markerLatLng);
 			}
+			console.log(res);
 
 			if (res) {
-				new Marker([house.pos.lat, house.pos.lng], { icon: this.icon })
+				new Marker([house.pos.lat, house.pos.lng], { icon: HOUSE_ICON })
 					.bindPopup(`<b>${house.name}</b><br>${house.description}`)
 					.addTo(this.markerGroup!);
 			}

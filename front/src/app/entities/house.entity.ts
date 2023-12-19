@@ -9,6 +9,8 @@ export interface HouseEntity {
 	description: string;
 	pos: any;
 
+	isFavorite?: boolean;
+
 	createdAt: Date;
 	updatedAt: Date;
 }
